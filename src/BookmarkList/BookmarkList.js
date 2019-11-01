@@ -8,6 +8,7 @@ class BookmarkList extends Component {
   };
 
   render() {
+
     const { bookmarks } = this.props
     return (
       <section className='BookmarkList'>
@@ -15,6 +16,7 @@ class BookmarkList extends Component {
         <ul className='BookmarkList__list' aria-live='polite'>
           {bookmarks.map(bookmark =>
             <BookmarkItem
+              clickPage={this.props.clickPage}
               key={bookmark.id}
               {...bookmark}
             />

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AddBookmark from './AddBookmark/AddBookmark';
+import EditBookmark from './EditBookmark/EditBookmark';
 import BookmarkList from './BookmarkList/BookmarkList';
 import Nav from './Nav/Nav';
 import config from './config';
@@ -54,6 +55,12 @@ class App extends Component {
     })
   }
 
+  editBookmark = bookmark => {
+    this.setState({
+      bookmarks: [ ...this.state.bookmarks, bookmark ],
+    })
+  }
+
   componentDidMount() {
     fetch(config.API_ENDPOINT, {
       method: 'GET',
@@ -85,8 +92,15 @@ class App extends Component {
               onClickCancel={() => this.changePage('list')}
             />
           )}
+          {page === 'edit' && (
+            <EditBookmark
+              onEditBookmark={this.editBookmark}
+              onClickCancel={() => this.changePage('list')}
+            />
+          )}
           {page === 'list' && (
             <BookmarkList
+              clickPage={this.changePage}
               bookmarks={bookmarks}
             />
           )}

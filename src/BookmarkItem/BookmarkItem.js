@@ -1,8 +1,12 @@
 import React from 'react';
 import Rating from '../Rating/Rating';
 import './BookmarkItem.css';
+// import { Route } from 'react-router-dom'
+// import EditBookmark from '../EditBookmark/EditBookmark';
+
 
 export default function BookmarkItem(props) {
+  console.log(props)
   return (
     <li className='BookmarkItem'>
       <div className='BookmarkItem__row'>
@@ -25,6 +29,9 @@ export default function BookmarkItem(props) {
           onClick={() => props.onClickDelete(props.id)}
         >
           Delete
+        </button>
+        <button onClick={() => props.clickPage('edit')}>
+          Edit
         </button>
       </div>
     </li>
