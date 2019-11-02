@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import AddBookmark from './AddBookmark/AddBookmark';
 import EditBookmark from './EditBookmark/EditBookmark';
 import BookmarkList from './BookmarkList/BookmarkList';
@@ -6,34 +7,10 @@ import Nav from './Nav/Nav';
 import config from './config';
 import './App.css';
 
-const bookmarks = [
-  // {
-  //   id: 0,
-  //   title: 'Google',
-  //   url: 'http://www.google.com',
-  //   rating: '3',
-  //   desc: 'Internet-related services and products.'
-  // },
-  // {
-  //   id: 1,
-  //   title: 'Thinkful',
-  //   url: 'http://www.thinkful.com',
-  //   rating: '5',
-  //   desc: '1-on-1 learning to accelerate your way to a new high-growth tech career!'
-  // },
-  // {
-  //   id: 2,
-  //   title: 'Github',
-  //   url: 'http://www.github.com',
-  //   rating: '4',
-  //   desc: 'brings together the world\'s largest community of developers.'
-  // }
-];
-
 class App extends Component {
   state = {
     page: 'list',
-    bookmarks,
+    bookmarks: [],
     error: null,
   };
 
@@ -57,7 +34,9 @@ class App extends Component {
 
   editBookmark = bookmark => {
     this.setState({
-      bookmarks: [ ...this.state.bookmarks, bookmark ],
+      bookmarks: this.state.bookmarks.map(bm =>
+        (bm.id !== bookmark.id) ? bm : bookmark
+      )
     })
   }
 
@@ -80,13 +59,14 @@ class App extends Component {
   }
 
   render() {
-    const { page, bookmarks } = this.state
+    // const {  bookmarks } = this.state
+    console.log(this.state)
     return (
       <main className='App'>
         <h1>Bookmarks!</h1>
         <Nav clickPage={this.changePage} />
         <div className='content' aria-live='polite'>
-          {page === 'add' && (
+          {/* {page === 'add' && (
             <AddBookmark
               onAddBookmark={this.addBookmark}
               onClickCancel={() => this.changePage('list')}
@@ -103,7 +83,21 @@ class App extends Component {
               clickPage={this.changePage}
               bookmarks={bookmarks}
             />
-          )}
+          )} */}
+          <Route
+            exact
+            path='/'
+            render={(props) => <BookmarkList bookmarks={this.state.bookmarks}/>}
+            />
+          <Route
+            path='/add-bookmark'
+            component={AddBookmark}
+            render={(props) => <AddBookmark onAddBookmark={this.addBookmark}/>}
+          />
+          <Route
+            path='/edit/:bookmarkId'
+            render={(props) => <EditBookmark {...props}/>}
+          />
         </div>
       </main>
     );
@@ -111,3 +105,6 @@ class App extends Component {
 }
 
 export default App;
+
+            // component={BookmarkList}
+            // bookmarks={bookmarks}

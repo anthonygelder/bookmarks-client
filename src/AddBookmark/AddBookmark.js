@@ -1,29 +1,57 @@
 import React, { Component } from  'react';
+import { Link } from 'react-router-dom';
 import config from '../config'
 import './AddBookmark.css';
 
-const Required = () => (
-  <span className='AddBookmark__required'>*</span>
-)
-
 class AddBookmark extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: "",
+      url: "",
+      description: "",
+      rating: 1,
+      error: null
+    };
+  }
+
   static defaultProps = {
     onAddBookmark: () => {}
   };
 
-  state = {
-    error: null,
-  };
+  titleChanged(title) {
+    this.setState({
+      title
+    });
+  }
+
+  urlChanged(url) {
+    this.setState({
+      url
+    });
+  }
+
+  descriptionChanged(description) {
+    this.setState({
+      description
+    });
+  }
+
+  ratingChanged(rating) {
+    this.setState({
+      rating
+    });
+  }
 
   handleSubmit = e => {
     e.preventDefault()
     // get the form fields from the event
-    const { title, url, description, rating } = e.target
+    const { title, url, description, rating } = this.state
     const bookmark = {
-      title: title.value,
-      url: url.value,
-      description: description.value,
-      rating: rating.value,
+      title: title,
+      url: url,
+      description: description,
+      rating: rating,
     }
     this.setState({ error: null })
     fetch(config.API_ENDPOINT, {
@@ -45,11 +73,9 @@ class AddBookmark extends Component {
         return res.json()
       })
       .then(data => {
-        title.value = ''
-        url.value = ''
-        description.value = ''
-        rating.value = ''
+        console.log('add submit data',data)
         this.props.onAddBookmark(data)
+        this.props.history.push('/')
       })
       .catch(error => {
         this.setState({ error })
@@ -58,7 +84,6 @@ class AddBookmark extends Component {
 
   render() {
     const { error } = this.state
-    const { onClickCancel } = this.props
     return (
       <section className='AddBookmark'>
         <h2>Create a bookmark</h2>
@@ -72,28 +97,26 @@ class AddBookmark extends Component {
           <div>
             <label htmlFor='title'>
               Title
-              {' '}
-              <Required />
             </label>
             <input
               type='text'
               name='title'
               id='title'
               placeholder='Great website!'
+              onChange={e => this.titleChanged(e.target.value)}
               required
             />
           </div>
           <div>
             <label htmlFor='url'>
               URL
-              {' '}
-              <Required />
             </label>
             <input
               type='url'
               name='url'
               id='url'
               placeholder='https://www.great-website.com/'
+              onChange={e => this.urlChanged(e.target.value)}
               required
             />
           </div>
@@ -104,13 +127,12 @@ class AddBookmark extends Component {
             <textarea
               name='description'
               id='description'
+              onChange={e => this.descriptionChanged(e.target.value)}
             />
           </div>
           <div>
             <label htmlFor='rating'>
               Rating
-              {' '}
-              <Required />
             </label>
             <input
               type='number'
@@ -119,13 +141,14 @@ class AddBookmark extends Component {
               defaultValue='1'
               min='1'
               max='5'
+              onChange={e => this.ratingChanged(e.target.value)}
               required
             />
           </div>
           <div className='AddBookmark__buttons'>
-            <button type='button' onClick={onClickCancel}>
-              Cancel
-            </button>
+            <Link to={'/'}>
+              <button>Cancel</button>
+            </Link>
             {' '}
             <button type='submit'>
               Save

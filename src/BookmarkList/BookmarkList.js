@@ -8,7 +8,7 @@ class BookmarkList extends Component {
   };
 
   render() {
-
+    console.log(this.props)
     const { bookmarks } = this.props
     return (
       <section className='BookmarkList'>
