@@ -89,6 +89,7 @@ class EditBookmark extends Component {
         return res.json().then(error => Promise.reject(error))
       })
       .then(() => {
+        console.log(this.props)
         this.props.onEditBookmark(newBookmark)
         this.props.history.push('/')
       })

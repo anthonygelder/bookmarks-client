@@ -9,14 +9,9 @@ import './App.css';
 
 class App extends Component {
   state = {
-    page: 'list',
     bookmarks: [],
     error: null,
   };
-
-  changePage = (page) => {
-    this.setState({ page })
-  }
 
   setBookmarks = bookmarks => {
     this.setState({
@@ -27,16 +22,21 @@ class App extends Component {
   }
 
   addBookmark = bookmark => {
+    console.log('add')
     this.setState({
       bookmarks: [ ...this.state.bookmarks, bookmark ],
     })
   }
 
   editBookmark = bookmark => {
+    console.log('edit')
+    const newBookmarks = this.state.bookmarks.map(bm =>
+      (bm.id === bookmark.id)
+        ? bookmark
+        : bm
+    )
     this.setState({
-      bookmarks: this.state.bookmarks.map(bm =>
-        (bm.id !== bookmark.id) ? bm : bookmark
-      )
+      bookmarks: newBookmarks
     })
   }
 
@@ -59,31 +59,11 @@ class App extends Component {
   }
 
   render() {
-    // const {  bookmarks } = this.state
-    console.log(this.state)
     return (
       <main className='App'>
         <h1>Bookmarks!</h1>
-        <Nav clickPage={this.changePage} />
+        <Nav />
         <div className='content' aria-live='polite'>
-          {/* {page === 'add' && (
-            <AddBookmark
-              onAddBookmark={this.addBookmark}
-              onClickCancel={() => this.changePage('list')}
-            />
-          )}
-          {page === 'edit' && (
-            <EditBookmark
-              onEditBookmark={this.editBookmark}
-              onClickCancel={() => this.changePage('list')}
-            />
-          )}
-          {page === 'list' && (
-            <BookmarkList
-              clickPage={this.changePage}
-              bookmarks={bookmarks}
-            />
-          )} */}
           <Route
             exact
             path='/'

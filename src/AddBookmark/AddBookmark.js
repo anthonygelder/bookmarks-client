@@ -64,16 +64,13 @@ class AddBookmark extends Component {
     })
       .then(res => {
         if (!res.ok) {
-          // get the error message from the response,
           return res.json().then(error => {
-            // then throw it
             throw error
           })
         }
         return res.json()
       })
       .then(data => {
-        console.log('add submit data',data)
         this.props.onAddBookmark(data)
         this.props.history.push('/')
       })
